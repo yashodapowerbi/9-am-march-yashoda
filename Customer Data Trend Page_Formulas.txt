@@ -1,4 +1,6 @@
-Create a tablle with name Customer Data Trend Measures
+******************************************************
+This text is  Dax formulas used in multitenant project
+******************************************************
 
 ******The below all measures created one by one using the navigation (Table Name->right click-> New Measure)*****
 Sum-->Complete column total
