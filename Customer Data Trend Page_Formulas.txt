@@ -1,0 +1,82 @@
+Create a tablle with name Customer Data Trend Measures
+
+******The below all measures created one by one using the navigation (Table Name->right click-> New Measure)*****
+Sum-->Complete column total
+==============================================================================
+
+Total Sales = SUM ( Sales[Line Total] )
+===================================================================================
+Sales LY = 
+CALCULATE( 
+	[Total Sales] , 
+		SAMEPERIODLASTYEAR( Dates[Date] ))
+=================================================================================
+
+Sales 2 Yrs Prior = 
+CALCULATE( 
+	[Total Sales] , 
+		SAMEPERIODLASTYEAR(SAMEPERIODLASTYEAR( Dates[Date] )))
+=================================================================================
+
+% Sales Growth to LY = 
+DIVIDE( [Total Sales]-[Sales LY] , [Sales LY]) * 100
+=================================================================================
+Total Costs = 
+SUMX ( Sales , 
+	Sales[Order Quantity] * Sales[Total Unit Cost] )
+=================================================================================
+Cumulative Sales (Selected) =
+CALCULATE( 
+	[Total Sales] , 
+	FILTER(
+		ALLSELECTED( Dates),
+		Dates[Date] <= MAX( Dates[Date])
+	)
+)
+=================================================================================
+Cumulative Sales LY = 
+CALCULATE( 
+
+	[Sales LY] , 
+	FILTER(
+		ALLSELECTED( Dates ),
+		Dates[Date] <= MAX( Dates[Date])
+	)
+)
+=================================================================================
+Cumulative Sales 2 Years Prior = 
+CALCULATE( 
+	[Sales 2 Yrs Prior] , 
+	FILTER(
+		ALLSELECTED( Dates ),
+		Dates[Date] <= MAX( Dates[Date])
+	)
+)
+=================================================================================
+Total Profits = [Total Sales] - [Total Costs]
+=================================================================================
+Profit Margin = 
+DIVIDE( [Total Profits] , [Total Sales] , 0 )
+=================================================================================
+Profits LY = 
+CALCULATE( 
+	[Total Profits] , 
+		SAMEPERIODLASTYEAR( Dates[Date] ))
+=================================================================================
+Lifetime Profits = 
+CALCULATE(
+	[Total Profits] , 
+		ALLEXCEPT( Sales , Customer[Customer Names]))
+=================================================================================
+Lifetime Sales = 
+CALCULATE(
+	[Total Sales] , 
+		ALLEXCEPT( Sales , Customer[Customer Names] ))
+=================================================================================
+Lifetime Profit Margin = 
+DIVIDE( [Lifetime Profits] , [Lifetime Sales] , 0 )
+=================================================================================
+Last Sale Amount = 
+CALCULATE( [Total Sales] , LASTNONBLANK( Dates[Date] , [Total Sales] )
+=================================================================================
+Last Sales Date = LASTNONBLANK( Dates[Date] , [Total Sales] )
